@@ -1,26 +1,28 @@
 import { Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Header from "./Header";
+import Loader from "../common/Loader";
 
 function Layout() {
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState("all");
   const [categories, setCategories] = useState([]);
+  const [searchText, setSearchText] = useState("");
+  const [loading , setLoading] = useState(true)
 
   useEffect(() => {
-    // 🔥 API CALL HAPPENS HERE (ONCE)
     Promise.all([
       fetch("https://dummyjson.com/products?limit=99&skip=0").then(res => res.json()),
       fetch("https://dummyjson.com/products?limit=99&skip=99").then(res => res.json())
     ])
       .then(([first, second]) => {
-        const merged = [...first.products, ...second.products];
-        setProducts(merged);
+        const mergedProducts = [...first.products, ...second.products];
+        setProducts(mergedProducts);
+        setLoading(false);
 
-        // extract categories dynamically
         const uniqueCategories = [
           "all",
-          ...new Set(merged.map(item => item.category))
+          ...new Set(mergedProducts.map(item => item.category))
         ];
         setCategories(uniqueCategories);
       });
@@ -28,8 +30,24 @@ function Layout() {
 
   return (
     <>
-      <Header categories={categories} setCategory={setCategory} />
-      <Outlet context={{ products, category }} />
+      <Header
+        categories={categories}
+        onCategorySelect={setCategory}
+        onSearch={setSearchText}
+      />
+
+      {loading ? (
+        <Loader/>
+      ):(
+
+      <Outlet
+        context={{
+          products,
+          category,
+          searchText, 
+        }}
+      />
+      )}
     </>
   );
 }

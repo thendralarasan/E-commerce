@@ -17,10 +17,10 @@ const categories = [
   "womens-watches",
   "womens-shoes",
   "home-decoration",
-   "kitchen-accessories",
-   "laptops",
-   "mobile-accessories",
-   "motorcycle",
+  "kitchen-accessories",
+  "laptops",
+  "mobile-accessories",
+  "motorcycle",
 ];
 
 function Header({ onCategorySelect, onSearch }) {
@@ -34,38 +34,45 @@ function Header({ onCategorySelect, onSearch }) {
 
   return (
     <header className="bg-white shadow sticky top-0 z-50">
-      {/* Top Bar */}
-      <div className="flex items-center justify-between px-6 py-4">
-        {/* Logo */}
-        <Link to="/" className="text-2xl font-bold text-blue-600">
+   
+      <div className="flex items-center justify-between px-6 py-3">
+
+        <Link
+          to="/"
+          onClick={() => {
+            setSearchText("");
+            onSearch("");
+            onCategorySelect("all");
+          }}
+          className="text-2xl font-bold text-blue-600"
+        >
           ShopEasy
         </Link>
 
-        {/* Search Bar */}
         <input
           type="text"
-          placeholder="Search products..."
+          placeholder="Search"
           value={searchText}
           onChange={handleSearch}
-          className="w-1/2 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-64 px-3 py-1.5 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
-        
-        {/* Cart */}
+
+
         <Link
           to="/cart"
           className="text-lg font-semibold text-gray-700 hover:text-blue-600"
         >
-          Cart 🛒
+          🛒 Cart
         </Link>
       </div>
 
-      {/* Categories */}
-      <div className="flex gap-4 px-6 py-3 bg-gray-100 overflow-x-auto">
+  
+      <div className="flex gap-3 px-6 py-2 bg-gray-100 overflow-x-auto">
         {categories.map((cat) => (
           <button
             key={cat}
             onClick={() => onCategorySelect(cat)}
-            className="px-4 py-2 bg-white border rounded-full text-sm capitalize hover:bg-blue-600 hover:text-white transition"
+            className="px-4 py-1.5 bg-white border rounded-full text-xs capitalize hover:bg-blue-600 hover:text-white transition whitespace-nowrap"
           >
             {cat.replace("-", " ")}
           </button>
