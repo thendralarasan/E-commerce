@@ -26,17 +26,14 @@ const categories = [
 function Header({ onCategorySelect, onSearch }) {
   const [searchText, setSearchText] = useState("");
 
-  const handleSearch = (e) => {
-    const value = e.target.value;
-    setSearchText(value);
-    onSearch(value);
+  const handleSearch = () => {
+    onSearch(searchText);
   };
 
   return (
     <header className="bg-white shadow sticky top-0 z-50">
-   
+  
       <div className="flex items-center justify-between px-6 py-3">
-
         <Link
           to="/"
           onClick={() => {
@@ -49,14 +46,27 @@ function Header({ onCategorySelect, onSearch }) {
           ShopEasy
         </Link>
 
-        <input
-          type="text"
-          placeholder="Search"
-          value={searchText}
-          onChange={handleSearch}
-          className="w-64 px-3 py-1.5 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            placeholder="Search"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleSearch();
+              }
+            }}
+            className="w-64 px-3 py-1.5 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
 
+          <button
+            onClick={handleSearch}
+            className="px-4 py-1.5 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700"
+          >
+            Search
+          </button>
+        </div>
 
         <Link
           to="/cart"
@@ -66,7 +76,7 @@ function Header({ onCategorySelect, onSearch }) {
         </Link>
       </div>
 
-  
+     
       <div className="flex gap-3 px-6 py-2 bg-gray-100 overflow-x-auto">
         {categories.map((cat) => (
           <button
